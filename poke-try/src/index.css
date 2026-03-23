@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Courier+Prime:wght@400;700&display=swap');
+
+:root {
+  --bg-dark: #0a0a1a;
+  --bg-panel: #111128;
+  --bg-panel-2: #1a1a3e;
+  --neon-yellow: #FFD700;
+  --neon-red: #FF3D3D;
+  --neon-blue: #4FC3F7;
+  --neon-green: #69D44B;
+  --text-primary: #E8E8E8;
+  --text-dim: #8888aa;
+  --pixel-border: #FFD700;
+
+  /* Type colors */
+  --type-fire: #FF6B35;
+  --type-water: #4FC3F7;
+  --type-grass: #69D44B;
+  --type-electric: #FFD700;
+  --type-psychic: #FF6AC1;
+  --type-normal: #A8A878;
+  --type-ice: #98D8D8;
+  --type-dragon: #7038F8;
+  --type-dark: #705848;
+  --type-fairy: #EE99AC;
+  --type-fighting: #C03028;
+  --type-flying: #A890F0;
+  --type-poison: #A040A0;
+  --type-ground: #E0C068;
+  --type-rock: #B8A038;
+  --type-bug: #A8B820;
+  --type-ghost: #705898;
+  --type-steel: #B8B8D0;
+
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--text-primary);
+  background-color: var(--bg-dark);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg-dark);
+  overflow-x: hidden;
+}
+
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* CRT Scanline Overlay */
+#root::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 10000;
+}
+
+/* Pixel font headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 1px;
+}
+
+/* Stats font */
+.stat-text {
+  font-family: 'Courier Prime', monospace;
+}
+
+/* Pixel rendering for sprites */
+.pixel-sprite {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Pixel border mixin */
+.pixel-border {
+  border: 3px solid var(--pixel-border);
+  box-shadow: 
+    4px 4px 0px var(--neon-yellow),
+    -2px -2px 0px var(--neon-yellow),
+    inset 0 0 20px rgba(255, 215, 0, 0.05);
+}
+
+.pixel-border-red {
+  border: 3px solid var(--neon-red);
+  box-shadow: 
+    4px 4px 0px var(--neon-red),
+    -2px -2px 0px var(--neon-red);
+}
+
+.pixel-border-blue {
+  border: 3px solid var(--neon-blue);
+  box-shadow: 
+    4px 4px 0px var(--neon-blue),
+    -2px -2px 0px var(--neon-blue);
+}
+
+/* Panel styling */
+.panel {
+  background: var(--bg-panel);
+  border: 3px solid var(--pixel-border);
+  box-shadow: 
+    4px 4px 0px var(--neon-yellow),
+    -2px -2px 0px var(--neon-yellow),
+    inset 0 0 30px rgba(255, 215, 0, 0.03);
+  border-radius: 2px;
+}
+
+/* CRT screen curvature effect */
+.crt-screen {
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hover effects */
+.hover-glow {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.hover-glow:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+  box-shadow: 
+    4px 4px 0px var(--neon-yellow),
+    -2px -2px 0px var(--neon-yellow),
+    0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Pokéball Loading Spinner */
+@keyframes pokeball-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pokeball-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(90deg); }
+  50% { transform: translateY(0) rotate(180deg); }
+  75% { transform: translateY(-10px) rotate(270deg); }
+}
+
+.pokeball-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #FF3D3D 0%, #FF3D3D 45%, #333 45%, #333 55%, #E8E8E8 55%, #E8E8E8 100%);
+  position: relative;
+  animation: pokeball-bounce 1.2s ease-in-out infinite;
+  margin: 40px auto;
+}
+
+.pokeball-spinner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: #E8E8E8;
+  border: 3px solid #333;
+  border-radius: 50%;
+}
+
+/* CRT Static / No Signal */
+@keyframes static-noise {
+  0% { background-position: 0 0; }
+  10% { background-position: -5% -10%; }
+  20% { background-position: -15% 5%; }
+  30% { background-position: 7% -25%; }
+  40% { background-position: 20% 25%; }
+  50% { background-position: -25% 10%; }
+  60% { background-position: 15% 5%; }
+  70% { background-position: 0% 15%; }
+  80% { background-position: 25% 35%; }
+  90% { background-position: -10% 10%; }
+  100% { background-position: 0 0; }
+}
+
+.crt-static {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-static::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+  animation: static-noise 0.3s steps(5) infinite;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Screen flash for critical hits */
+@keyframes screen-flash {
+  0% { opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+.screen-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  animation: screen-flash 0.3s ease-out forwards;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Faint animation */
+@keyframes faint-drop {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(60px); opacity: 0; }
+}
+
+.faint-animation {
+  animation: faint-drop 0.8s ease-in forwards;
+}
+
+/* Victory confetti */
+@keyframes confetti-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Typewriter cursor blink */
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Stat bar fill animation */
+@keyframes stat-fill {
+  from { width: 0; }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neon-yellow);
+  border: 1px solid var(--bg-dark);
+}
+
+/* Button base */
+.btn-pixel {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  padding: 10px 16px;
+  background: var(--bg-panel);
+  color: var(--neon-yellow);
+  border: 3px solid var(--neon-yellow);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 4px 4px 0px rgba(255, 215, 0, 0.3);
+}
+
+.btn-pixel:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    4px 6px 0px rgba(255, 215, 0, 0.4),
+    0 0 15px rgba(255, 215, 0, 0.2);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.btn-pixel:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 0px rgba(255, 215, 0, 0.3);
+}
+
+.btn-pixel:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :root {
+    font-size: 16px;
+  }
+  
+  h1 { font-size: 14px !important; }
+  h2 { font-size: 12px !important; }
+  h3 { font-size: 10px !important; }
+}
+
+/* Neon text glow */
+.neon-text {
+  text-shadow: 
+    0 0 5px var(--neon-yellow),
+    0 0 10px var(--neon-yellow),
+    0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.neon-text-red {
+  text-shadow:
+    0 0 5px var(--neon-red),
+    0 0 10px var(--neon-red),
+    0 0 20px rgba(255, 61, 61, 0.3);
+}
+
+.neon-text-blue {
+  text-shadow:
+    0 0 5px var(--neon-blue),
+    0 0 10px var(--neon-blue),
+    0 0 20px rgba(79, 195, 247, 0.3);
+}
+
+/* Accessibility: focus visible */
+:focus-visible {
+  outline: 2px solid var(--neon-yellow);
+  outline-offset: 2px;
+}
+
+/* Link reset */
+a {
+  color: inherit;
+  text-decoration: none;
+}
